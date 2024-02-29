@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CanSat System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    p {
+      color: #666;
+    }
+    .system-description {
+      margin-top: 20px;
+    }
+    .component {
+      background-color: #f9f9f9;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    .component h2 {
+      margin-top: 0;
+      color: #555;
+    }
+    .component p {
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>CanSat System</h1>
+    <div class="system-description">
+      <p>The CanSat system is an educational tool designed to simulate satellite payloads for hands-on learning in aerospace engineering.</p>
+      <p>It comprises an ESP8266 microcontroller, sensors including ultrasonic, MPU6050, and BMP380, as well as actuators like servo motors and a buzzer.</p>
+      <div class="component">
+        <h2>Ultrasonic Sensor</h2>
+        <p>Used for altitude measurement.</p>
+      </div>
+      <div class="component">
+        <h2>MPU6050</h2>
+        <p>Accelerometer/gyroscope for orientation sensing.</p>
+      </div>
+      <div class="component">
+        <h2>BMP380</h2>
+        <p>Altitude and pressure sensor.</p>
+      </div>
+      <div class="component">
+        <h2>Servo Motors</h2>
+        <p>Used for controlled descent.</p>
+      </div>
+      <div class="component">
+        <h2>Buzzer</h2>
+        <p>Indicates landing.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
