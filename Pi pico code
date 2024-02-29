@@ -1,0 +1,83 @@
+import machine
+import utime
+from machine import Pin, I2C
+from mpu6050 import MPU6050
+from hcsr04 import HCSR04
+import adafruit_bmp380
+import board
+
+# Define pin assignments
+TRIGGER_PIN = 1
+ECHO_PIN = 2
+SERVO_1_PIN = 3
+SERVO_2_PIN = 4
+SERVO_3_PIN = 5
+BUZZER_PIN = 6
+
+# Initialize ultrasonic sensor
+ultrasonic = HCSR04(trigger_pin=TRIGGER_PIN, echo_pin=ECHO_PIN)
+
+# Initialize servos
+servo1 = machine.PWM(Pin(SERVO_1_PIN))
+servo2 = machine.PWM(Pin(SERVO_2_PIN))
+servo3 = machine.PWM(Pin(SERVO_3_PIN))
+
+# Initialize MPU6050
+i2c = I2C(0)
+mpu = MPU6050(i2c)
+
+# Initialize BMP380
+i2c = I2C(1, scl=Pin(board.GP5), sda=Pin(board.GP4))
+bmp = adafruit_bmp3xx.BMP3XX_I2C(i2c)
+
+# Initialize buzzer
+buzzer = Pin(BUZZER_PIN, Pin.OUT)
+
+# Define thresholds
+DISTANCE_THRESHOLD = 100  # in cm
+ALTITUDE_THRESHOLD = 100  # in meters
+
+# Flag to indicate if the cansat has landed
+landed = False
+
+def altitude_check():
+    # Read altitude from BMP380
+    altitude = bmp.altitude
+
+    # Convert altitude from meters to centimeters
+    altitude *= 100
+
+    return altitude
+
+# Main loop
+while True:
+    # Read ultrasonic sensor
+    distance = ultrasonic.distance_cm()
+
+    # Read MPU6050 data
+    ax, ay, az = mpu.read_acceleration()
+
+    # Check conditions for servo 1
+    if distance > DISTANCE_THRESHOLD and az < 0:
+        # Rotate servo 1
+        servo1.freq(50)
+        servo1.duty_u16(32768)  # Assuming 90 degree rotation
+
+    # Check conditions for servo 2
+    if altitude_check() > ALTITUDE_THRESHOLD:
+        # Rotate servo 2
+        servo2.freq(50)
+        servo2.duty_u16(32768)  # Assuming 90 degree rotation
+
+    # Rotate servo 3
+    servo3.freq(50)
+    servo3.duty_u16(32768)  # Assuming 90 degree rotation
+
+    # Check if cansat has landed
+    if not landed and altitude_check() == 0:
+        # If cansat has landed, turn on the buzzer
+        buzzer.value(1)
+        landed = True
+
+    # Delay for 50 milliseconds
+    utime.sleep_ms(50)
